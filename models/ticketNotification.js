@@ -10,7 +10,7 @@ const ticketNotificationSchema = new mongoose.Schema({
         required: true
     },
     recepientEmails: {
-        type: String,
+        type: [String],
         required: true
     },
     status: {
@@ -19,11 +19,12 @@ const ticketNotificationSchema = new mongoose.Schema({
             values: ["SUCCESS","FAILED","PENDING"],
             message:"invalid ticket status"
         },
+        default: "PENDING",
         required: true
     }
 },{timestamps: true});
 
 
-const ticketNotificationModel = mongoose.model("TicketNotification","ticketNotificationSchema")
+const ticketNotificationModel = mongoose.model("TicketNotification",ticketNotificationSchema)
 
 module.exports = ticketNotificationModel;
