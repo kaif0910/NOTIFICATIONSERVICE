@@ -1,4 +1,5 @@
-const Ticket = require("../models/ticketNotification");
+const ticketNotificationModel = require("../models/ticketNotification.model");
+const Ticket = require("../models/ticketNotification.model");
 const {STATUS} = require("../utils/constants");
 
 const create = async (data) =>{
@@ -19,6 +20,16 @@ const create = async (data) =>{
     }
 }
 
+const getAllNotifications = async () => {
+    try {
+        const response = await ticketNotificationModel.find();
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
 module.exports = {
-    create
+    create,
+    getAllNotifications
 }
