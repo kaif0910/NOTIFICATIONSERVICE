@@ -12,6 +12,11 @@ const routes = (app) => {
     app.get(
         "/notiservice/api/v1/notifications",
         ticketnotifiController.getAllNotifications
+    );
+
+    app.get(
+        "/notiservice/api/v1/notifications/:id",
+        ticketnotifiController.getAllNotifications
     )
 }
 

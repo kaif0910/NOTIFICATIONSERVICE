@@ -1,4 +1,3 @@
-const ticketNotificationModel = require("../models/ticketNotification.model");
 const Ticket = require("../models/ticketNotification.model");
 const {STATUS} = require("../utils/constants");
 
@@ -22,7 +21,17 @@ const create = async (data) =>{
 
 const getAllNotifications = async () => {
     try {
-        const response = await ticketNotificationModel.find();
+        const response = await Ticket.find();
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
+
+const getNotifiByid = async (data) => {
+    try {
+        const response = await Ticket.findById(data.ticketId);
         return response;
     } catch (error) {
         throw error;
@@ -31,5 +40,6 @@ const getAllNotifications = async () => {
 
 module.exports = {
     create,
-    getAllNotifications
+    getAllNotifications,
+    getNotifiByid
 }

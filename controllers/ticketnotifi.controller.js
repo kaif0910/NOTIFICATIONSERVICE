@@ -35,7 +35,25 @@ const getAllNotifications = async (req,res) => {
     }
 }
 
+
+const getNotifiByid = async (req,res) => {
+    try {
+        const response = await ticketnotifiService.getNotifiByid(req.params.ticketId);
+        successResponseBody.data = response;
+        successResponseBody.message = "ticket details of the required id is fetched successfully";
+        return res.status(STATUS.OK).json(successResponseBody);
+    } catch (error) {
+        if(error.err){
+            errorResponseBody.err = error.err;
+            return res.status(error.code).json(errorResponseBody);
+        }
+        errorResponseBody.err = error;
+        return res.status(STATUS.INTERNAL_SERVER_ERROR).json(errorResponseBody);
+    }
+}
+
 module.exports = {
     createTicket,
-    getAllNotifications
+    getAllNotifications,
+    getNotifiByid
 }
