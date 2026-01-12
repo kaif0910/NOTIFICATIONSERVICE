@@ -32,6 +32,12 @@ const getAllNotifications = async () => {
 const getNotifiByid = async (data) => {
     try {
         const response = await Ticket.findById(data.ticketId);
+        if(!response) {
+            throw {
+                err: "no ticket details found",
+                code: STATUS.NOT_FOUND
+            }
+        }
         return response;
     } catch (error) {
         throw error;
