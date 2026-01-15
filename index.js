@@ -3,8 +3,9 @@ const app = express();
 const bodyParser = require("body-parser");
 const env = require("dotenv");
 const mongoose = require("mongoose");
-const sendMail = require("./services/email.service");
+const cron = require("./crons/cron");
 const ticketnotifiRoutes = require("./routes/ticketnotifi.routes");
+
 
 env.config();
 
@@ -22,4 +23,6 @@ app.listen(process.env.PORT,async () =>{
     } catch (error) {
         console.log("cannot connect to database",error);
     }
+
+    cron.mailerCron();
 });

@@ -1,10 +1,12 @@
 const cron = require("node-cron");
 const ticketNotificationModel = require("../models/ticketNotification.model");
-const sendMail = require("../services/email.service");
+const Mailer = require("../services/email.service");
 
-cron.schedule("*/2 * * * *", async () => {
-    const notificationsToBeSent = await ticketNotificationModel.find({
-        status: PENDING
+const mailerCron = () => {
+    const mailer = Mailer(process.env.EMAIL,process.env.EMAIL_PASSWORD); 
+    cron.schedule("*/2 * * * *", async () => {
+        const notificationsToBeSent = await ticketNotificationModel.find({
+            status: PENDING
     });
 
     notificationsToBeSent.forEach(notification => {
@@ -14,6 +16,22 @@ cron.schedule("*/2 * * * *", async () => {
             subject: notification.subject,
             text: notification.content
         };
-        sendMail(process.env.EMAIL,process.env.EMAIL_PASSWORD,mailData);
+        mailer.sendMail(mailData , async () => {
+            if(err){
+                console.log(err);
+            }else{
+                console.log(data);
+                const savedNotification = await Ticket.findOne({_id: notification._id});
+                savedNotification.status = "SUCCESS";
+                await savedNotification.save();
+            }
+        })
     })
-})
+});
+}
+
+module.exports = {
+    mailerCron
+};
+
+
