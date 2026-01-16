@@ -6,7 +6,7 @@ const mailerCron = () => {
     const mailer = Mailer(process.env.EMAIL,process.env.EMAIL_PASSWORD); 
     cron.schedule("*/2 * * * *", async () => {
         const notificationsToBeSent = await ticketNotificationModel.find({
-            status: PENDING
+            status: "PENDING"
     });
 
     notificationsToBeSent.forEach(notification => {
@@ -16,12 +16,14 @@ const mailerCron = () => {
             subject: notification.subject,
             text: notification.content
         };
-        mailer.sendMail(mailData , async () => {
+        mailer.sendMail(mailData , async (err,data) => {
             if(err){
                 console.log(err);
             }else{
-                console.log(data);
-                const savedNotification = await Ticket.findOne({_id: notification._id});
+                console.log(data.response);
+                const savedNotification = await ticketNotificationModel.findOne({
+                    _id: notification._id
+                });
                 savedNotification.status = "SUCCESS";
                 await savedNotification.save();
             }
